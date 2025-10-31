@@ -4,52 +4,58 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>クライアントサイド</title>
-    <script src="https://unpkg.com/petite-vue" defer init></script>
   </head>
 
-  <body v-scope="dataset()">
+  <body>
     <p>
-      <label for="name">名前：</label>
-      <input id="name" v-model="name" /><br />
+      <label for="name">名前：</label><input id="name" /><br />
       <label for="rank">ランク：</label>
-      <select id="rank" v-model="rank">
+      <select id="rank">
         <option>A</option>
         <option>B</option>
         <option>C</option>
       </select>
     </p>
     <p>
-      <button @click="getData">GET</button>
-      <button @click="postData">POST</button>
-      <button @click="putData">PUT</button>
-      <button @click="deleteData">DELETE</button>
+      <button id="get">GET</button>
+      <button id="post">POST</button>
+      <button id="put">PUT</button>
+      <button id="delete">DELETE</button>
     </p>
-    <p>{{data}}</p>
+    <p id="result">レスポンスデータに置き換わります</p>
   </body>
 
   <script>
-    function dataset() {
-      return {
-        data: 'レスポンスデータに置き換わります',
-        name: '',
-        rank: '',
+    // 各ボタンと関数の紐づけ
+    document.getElementById('get').addEventListener('click', getData);
+    document.getElementById('post').addEventListener('click', postData);
+    document.getElementById('put').addEventListener('click', putData);
+    document.getElementById('delete').addEventListener('click', deleteData);
 
-        // GETリクエスト
-        async getData() {
-          const res = await fetch('/api');
-          const data = await res.json();
-          this.data = JSON.stringify(data, null, 2);
-        },
+    // レスポンス表示用のp要素
+    const result = document.getElementById('result');
 
-        // POSTリクエスト
-        async postData() {},
-
-        // PUTリクエスト
-        async putData() {},
-
-        // DELETEリクエスト
-        async deleteData() {}
-      };
+    // フォームからパラメーターを取得する関数
+    function getParams() {
+      const name = document.getElementById('name').value;
+      const rank = document.getElementById('rank').value;
+      return { name, rank };
     }
+
+    // GETリクエスト
+    async function getData() {
+      const res = await fetch('/api');
+      const data = await res.json();
+      result.textContent = JSON.stringify(data, null, 2);
+    }
+
+    // POSTリクエスト
+    async function postData() {}
+
+    // PUTリクエスト
+    async function putData() {}
+
+    // DELETEリクエスト
+    async function deleteData() {}
   </script>
 </html>
